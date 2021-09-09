@@ -1,4 +1,7 @@
+const UserController = require("./userController");
+const ArticleController = require("./articleController");
+
 module.exports = {
-    userController: require("./userControllers"),
-    articlesController: require("./articlesControllers")
+    UserController,
+    ArticleController
 }
