@@ -1,8 +1,10 @@
-const router = require("express").Router(); 
-const { articleModel } = require("../models")
+const router = require("express").Router();
+const { Article } = require("../models");
 
-router.get('/all', (req, res) => {
-    res.send('This is the all route!')
-})
+router.post("/register", async (req, res) => {
+  Article.create({
+    title: "username created",
+  });
+});
 
 module.exports = router;
