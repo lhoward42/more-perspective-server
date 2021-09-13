@@ -1,15 +1,18 @@
 const Express = require("express");
 const app = Express();
+const cors = require("cors");
 const { appPort, dbName } = require("./config/index");
 
 const { sequelize } = require("./db");
 
 const controllers = require("./controllers");
-app.use(Express.json());
 
+app.use(cors());
+app.options("*", cors());
+app.use(Express.json());
 app.use("/users", controllers.UserController);
 app.use("/articles", controllers.ArticleController);
-// app.use("/entry", controllers.EntryController);
+app.use("/entry", controllers.EntryController);
 
 sequelize
   .authenticate()

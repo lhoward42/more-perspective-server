@@ -1,4 +1,4 @@
-const { sequelize, synceDb } = require("../db");
+const { sequelize, syncDb } = require("../db");
 const { DataTypes } = require("sequelize");
 
 const DefineUser = require("./userModel");
@@ -15,6 +15,6 @@ Entry.belongsTo(User);
 Entry.hasMany(Article);
 Article.belongsTo(Entry);
 
-synceDb(sequelize, { alter: true });
+syncDb(sequelize, { alter: true });
 
 module.exports = { User, Article, Entry };

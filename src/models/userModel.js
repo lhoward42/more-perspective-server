@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     confirmationCode: {
       type: DataTypes.STRING,
       allowNull: true,
-      unique: true,
+      //   unique: true,
     },
   });
   return User;

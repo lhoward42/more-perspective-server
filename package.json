@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/app.js",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "format": "prettier --write \"./**/*.{js,jsx,json}\""
   },
   "author": "",
   "license": "ISC",
@@ -17,9 +18,8 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.6.5"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.12"
+    "sequelize": "^6.6.5",
+    "nodemon": "^2.0.12",
+    "cors": "^2.8.5"
   }
 }

@@ -12,7 +12,7 @@ sequelize
     console.error("Unable to connect to the database:", err);
   });
 
-async function synceDb(sequelize, options) {
+async function syncDb(sequelize, options) {
   const { force, alter } = options;
   try {
     if (force) await sequelize.sync({ force: true });
@@ -25,5 +25,5 @@ async function synceDb(sequelize, options) {
 
 module.exports = {
   sequelize,
-  synceDb,
+  syncDb,
 };
