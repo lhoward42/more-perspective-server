@@ -3,10 +3,11 @@ const validateToken = require("../utils/validateToken");
 const jwt = require("jsonwebtoken");
 const { Entry, User } = require("../models");
 const { jwtSecret } = require("../config");
+const { UniqueConstraintError } = require("sequelize/lib/errors");
 
 router.get("/all/:id", validateToken, async (req, res) => {
   let u = await User.findOne({ where: { id: req.params.id } });
-  let entries = u ? await u.getPosts() : null;
+  let entries = u ? await u.getEntries() : null;
   if (entries) {
     let cleaned_entries = entries.map((e) => {
       const { id, entryName, articleTitles, contents, sources, images } = e;
@@ -16,42 +17,12 @@ router.get("/all/:id", validateToken, async (req, res) => {
   } else res.send(entries);
 });
 
-// router.get("/:id", async (req, res) => {
-//   const { id } = req.user;
-//   const entryId = req.params.id;
-
-//   try {
-//     const getEntry = await Entry.findOne({
-//       where: {
-//         id: entryId,
-//         userId: id,
-//       },
-//     });
-
-//     if (getEntry) {
-//       res.status(200).json({
-//         data: getEntry,
-//       });
-//     } else {
-//       res.status(400).json({
-//         message: "bad request",
-//       });
-//     }
-//   } catch (err) {
-//     res.status(500).json({
-//       message: err,
-//     });
-//   }
-// });
-
 router.post("/create", validateToken, async (req, res) => {
   let message;
-  console.log("in create route");
   try {
     let u = await User.findOne({ where: { id: req.user.id } });
-    console.log(u);
     if (u) {
-      let newEntry = await Entry.create({
+      let newEntry = await u.createEntry({
         entryName: req.body.entryName,
         articleTitles: req.body.articleTitles,
         contents: req.body.contents,
@@ -71,53 +42,115 @@ router.post("/create", validateToken, async (req, res) => {
       };
     }
   } catch (err) {
-    message = { message: "Post Creation Failed" };
+    if (err instanceof UniqueConstraintError) {
+      message = { message: "Post Creation Failed, expected unique entryName" };
+    } else {
+      message = { message: "Post Creation Failed" };
+    }
   }
   res.json(message);
 });
 
+// router.put("/:id", validateToken, async (req, res, next) => {
+//   let message;
+//   try{
+//   let u = await User.findOne({ where: { id: req.user.id } });
+//   let entry = u
+//     ? await Entry.findOne({ where: { EntryId: req.params.id } })
+//     : null;
+//   if (entry) {
+//     let updateEntry = await Entry.update(
+//       {
+//         entryName: req.body.entryName,
+//         articleTitles: req.body.articleTitles,
+//         contents: req.body.contents,
+//         sources: req.body.sources,
+//         images: req.body.images,
+//       },
+//       entry
+//     );
+//     await u.setEntry(updateEntry);
+//     message = {
+//       message: "Entry made",
+//       data: newEntry,
+//     };
+//   } else {
+//     message = {
+//       message: "Can't update post",
+//       data: null,
+//     };
+//   }
+// } catch (err) {
+//   message = {
+//     message: "User does not exist"
+//   }
+// }
+// });
+
 router.put("/:id", validateToken, async (req, res) => {
   const { id } = req.user;
   const entryId = req.params.id;
-  const { entryName } = req.body;
-
-  const query = {
-    where: {
-      id: entryId,
-      userId: id,
-    },
-    returning: true,
-  };
-
-  const data = {
-    entryName,
-  };
-
+  const { entryName, articleTitles, contents, sources, images } = req.body;
+  let message;
+  
+  console.log(id);
   try {
-    const updateEntry = await Entry.update(data, query);
+    // const u = await User.findOne({ where: { id: req.user.id } });
+    // console.log(u);
+    // const entryId = u
+    //   ? await Entry.findOne({ where: { EntryId: req.params.id } })
+    //   : null;
 
-    if (updateEntry[0] === 1) {
-      res.status(200).json({
-        data: updateEntry,
-      });
-    } else {
-      res.status(400).json({
-        message: "bad request",
-      });
-    }
+    // const query = { where: { id: entryId, UserId: u }, returning: true };
+
+    // const data = {
+    //   entryName,
+    //   articleTitles,
+    //   contents,
+    //   sources,
+    //   images,
+    // };
+    console.log("THIS IS DATA", data);
+    // if (entryId) {
+    let data;
+    const updateEntry = await Entry.update(
+      (data = {
+        entryName: entryName,
+        articleTitles: articleTitles,
+        contents: contents,
+        sources: sources,
+        images: images,
+      }
+      ),
+      { where: { id: entryId } }
+    ); 
+    console.log(data);
+    await u.setEntry(updateEntry);
+    console.log(updateEntry);
+    //   message = {
+    //     message: "Entry updated",
+    //     data: updateEntry,
+    //   };
+    // } else {
+    //   message = {
+    //     message: "Can't make an update",
+    //     data: null,
+    //   };
+    // }
   } catch (err) {
-    res.status(500).json({
-      message: err,
-    });
+    message = {
+      message: "Entry is not updated",
+    };
   }
+  res.json(message);
 });
 
 router.delete("/:id", validateToken, async (req, res) => {
   const { id } = req.user;
   const entryId = req.params.id;
-
+  let message;
   try {
-    let message;
+    
     Entry.destroy({
       where: {
         id: entryId,
@@ -126,8 +159,9 @@ router.delete("/:id", validateToken, async (req, res) => {
     });
     message = { message: "success" };
   } catch (err) {
-    message = { message: "Failed to Update " };
+    message = { message: "Failed to Delete " };
   }
+  res.json(message);
 });
 
 module.exports = router;

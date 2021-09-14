@@ -6,24 +6,23 @@ const { UniqueConstraintError } = require("sequelize/lib/errors");
 const { jwtSecret } = require("../config");
 
 router.post("/register", async (req, res) => {
-  const { email, passwordHash, userName } = req.body;
+  const { email, password, userName } = req.body;
 
   try {
-    const confirmToken = jwt.sign({ email: email }, jwtSecret);
-    // const pwdHash = bcrypt.hashSync(password, 12);
-
     const createUser = await User.create({
       userName: userName,
       passwordHash: bcrypt.hashSync(password, 12),
       email: email,
-      confirmed: false,
-      confirmationCode: confirmToken, //you need to comment these back in at some point
     });
+
+    const confirmToken = jwt.sign({ email: email, id: createUser.id }, jwtSecret);
+
     res.status(200).json({
       email: createUser.email,
       userName: createUser.userName,
       confirmationToken: confirmToken,
     });
+
   } catch (err) {
     console.log(err);
     if (err instanceof UniqueConstraintError) {

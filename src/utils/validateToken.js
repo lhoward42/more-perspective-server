@@ -20,15 +20,17 @@ const validateToken = async (req, res, next) => {
               jwtSecret
             )
           : undefined;
-        console.log(payload);
+        // console.log(payload);
 
         if (payload) {
+          console.log(payload.id)
           let getUser = await User.findOne({
             where: { id: payload.id },
           });
+        //   console.log(getUser)
+
           if (getUser) {
-            console.log(getUser.id);
-            req.user.id = getUser.id;
+            req.user = getUser;
             next();
           } else {
             res.status(400).send({ message: " Not Authorized" });
@@ -40,9 +42,11 @@ const validateToken = async (req, res, next) => {
         res.status(403).send({ message: "forbidden" });
       }
     } catch (err) {
+      console.log(err)
       res.status(500).send({ message: "validate failed" });
     }
   }
 };
 
 module.exports = validateToken;
+

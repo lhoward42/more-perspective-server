@@ -14,15 +14,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
     },
-    confirmed: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-    },
-    confirmationCode: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      //   unique: true,
-    },
   });
   return User;
 };
