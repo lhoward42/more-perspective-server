@@ -12,7 +12,7 @@ const Entry = DefineEntry(sequelize, DataTypes);
 User.hasMany(Entry);
 Entry.belongsTo(User);
 
-User.hasMany(Article);
+Entry.hasMany(Article);
 Article.belongsTo(Entry);
 
 syncDb(sequelize, { alter: true });
