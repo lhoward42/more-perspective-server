@@ -10,9 +10,10 @@ const controllers = require("./controllers");
 app.use(cors());
 app.options("*", cors());
 app.use(Express.json());
-app.use("/users", controllers.UserController);
-app.use("/articles", controllers.ArticleController);
+app.use("/user", controllers.UserController);
 app.use("/entry", controllers.EntryController);
+app.use("/article", controllers.ArticleController);
+
 
 sequelize
   .authenticate()

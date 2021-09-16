@@ -61,7 +61,7 @@ router.get("/:id", validateToken, async (req, res) => {
   }
 });
 
-router.put("/:id", validateToken, async (req, res) => {
+router.put("/update/:id", validateToken, async (req, res) => {
   const entryId = req.params.id;
   const { entryName, articleTitles, contents, sources, images } = req.body;
 
@@ -90,7 +90,7 @@ router.put("/:id", validateToken, async (req, res) => {
   res.json(message)
 });
 
-router.delete("/:id", validateToken, async (req, res) => {
+router.delete("/delete/:id", validateToken, async (req, res) => {
   const { id } = req.user;
   const entryId = req.params.id;
   let message;

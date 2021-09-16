@@ -40,17 +40,8 @@ router.post("/create/:id", validateToken, async (req, res) => {
   res.json(message);
 });
 
-router.get("/all/:EntryId", validateToken, async (req, res) => {
-  let message;
-  try {
-  const articles = await Article.findAll({ where: { EntryId: req.params.EntryId }})
-  res.send(articles)
-} catch (err) {
-  message = { message: "Get article failed", err}
-}
-})
 
-router.get("/mine/:EntryId/:id", validateToken, async (req, res) => {
+router.get("/:EntryId/:id", validateToken, async (req, res) => {
   let message;
   const articleId = req.params.id;
 
@@ -62,35 +53,6 @@ router.get("/mine/:EntryId/:id", validateToken, async (req, res) => {
   }
 })
 
-router.put("/update/:EntryId/:id", validateToken, async (req, res) => {
-  const articleId = req.params.id;
-  const EntryId = req.params.EntryId
-  const { title, author, description, content, sourceName, publishedAt } = req.body;
-  console.log(articleId);
-  const query = {
-    where: {
-      id: articleId,
-      EntryId: EntryId
-    }
-  }
-
-  const data = { title, author, description, content, sourceName, publishedAt }
-
-  let message;
-  try {
-    const updateArticle = await Article.update(data, query)
-    message = {
-      message: "Article successfully updated",
-      data: updateArticle,
-    }
-  } catch (err) {
-    message = {
-      message: "Could not update article", err, 
-      data: null,
-    }
-  }
-res.json(message)
-})
 
 router.delete("/delete/:EntryId/:id", validateToken, async (req, res) => {
   const articleId = req.params.id;
