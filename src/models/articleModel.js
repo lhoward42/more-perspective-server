@@ -3,30 +3,29 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     author: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     description: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     content: {
-        type: DataTypes.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     sourceName: {
-        type: DataTypes.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     image: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
     },
     publishedAt: {
-        type: DataTypes.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
   });

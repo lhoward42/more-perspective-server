@@ -9,13 +9,14 @@ router.post("/create/:id", validateToken, async (req, res) => {
     let entry = await Entry.findOne({ where: { id: req.params.id } });
     if (entry) {
       console.log("inside conditional");
-      let { title, author, description, content, sourceName, publishedAt } = req.body
+      let { title, author, description, content, sourceName, publishedAt, image } = req.body
       let newArticle = await entry.createArticle({
         title: title,
         author: author,
         description: description,
         content: content,
         sourceName: sourceName,
+        image: image,
         publishedAt: publishedAt,
       });
       console.log(newArticle);
@@ -31,11 +32,9 @@ router.post("/create/:id", validateToken, async (req, res) => {
       };
     }
   } catch (err) {
-    if (err instanceof UniqueConstraintError) {
-      message = { message: "Post Creation Failed, expected unique entryName" };
-    } else {
+    
       message = { message: "Post Creation Failed", err };
-    }
+    
   }
   res.json(message);
 });
