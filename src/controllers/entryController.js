@@ -11,7 +11,6 @@ router.post("/create", validateToken, async (req, res) => {
       let newEntry = await u.createEntry({
         entryName: req.body.entryName,
         description: req.body.description,
-        
       });
       await u.addEntry(newEntry);
 
@@ -61,7 +60,7 @@ router.get("/:id", validateToken, async (req, res) => {
 
 router.put("/update/:id", validateToken, async (req, res) => {
   const entryId = req.params.id;
-  const { entryName, articleTitles, contents, sources, images, notes } = req.body;
+  const { entryName, description } = req.body;
 
   const query = {
     where: {
@@ -70,7 +69,7 @@ router.put("/update/:id", validateToken, async (req, res) => {
     returning: true,
   };
 
-  const data = { entryName, articleTitles, contents, sources, images, notes };
+  const data = { entryName, description };
 
   let message;
   try {
@@ -85,7 +84,7 @@ router.put("/update/:id", validateToken, async (req, res) => {
       data: null,
     };
   }
-  res.json(message)
+  res.json(message);
 });
 
 router.delete("/delete/:id", validateToken, async (req, res) => {
