@@ -23,11 +23,11 @@ const validateToken = async (req, res, next) => {
         // console.log(payload);
 
         if (payload) {
-          console.log(payload.id);
+          console.log(payload.id)
           let getUser = await User.findOne({
             where: { id: payload.id },
           });
-          //   console.log(getUser)
+        //   console.log(getUser)
 
           if (getUser) {
             req.user = getUser;
@@ -42,10 +42,11 @@ const validateToken = async (req, res, next) => {
         res.status(403).send({ message: "forbidden" });
       }
     } catch (err) {
-      console.log(err);
+      console.log(err)
       res.status(500).send({ message: "validate failed" });
     }
   }
 };
 
 module.exports = validateToken;
+
