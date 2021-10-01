@@ -1,7 +1,8 @@
 const { Sequelize } = require("sequelize");
 const { dbURL } = require("../config");
 
-const sequelize = new Sequelize(process.env.ENVIRONMENT === 'development' ? dbURL : process.env.DATABASE_URL, { dialect: "postgres" });
+const sequelize = new Sequelize(process.env.ENVIRONMENT === 'development' ? dbURL : process.env.DATABASE_URL,
+process.env.ENVIRONMENT === 'development' ? { dialect: "postgres" } : { dialect: "postgres", dialectOptions: {ssl: {require: true, rejectedUnauthorized: false}}});
 
 sequelize
   .authenticate()
