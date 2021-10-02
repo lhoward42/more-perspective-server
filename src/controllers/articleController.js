@@ -52,6 +52,17 @@ router.get("/:EntryId/:id", validateToken, async (req, res) => {
   }
 })
 
+router.get("/:EntryId", validateToken, async (req, res) => {
+  let message;
+  const { EntryId } = req.params
+
+  try {
+    const article = await Article.findAll({ where: { EntryId: EntryId } })
+    res.send(article);
+  } catch (err) {
+    message = { message: "Article could not be found", err}
+  }
+})
 
 router.delete("/delete/:EntryId/:id", validateToken, async (req, res) => {
   const articleId = req.params.id;
