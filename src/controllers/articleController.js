@@ -8,8 +8,8 @@ router.post("/create/:id", validateToken, async (req, res) => {
   try {
     let entry = await Entry.findOne({ where: { id: req.params.id } });
     if (entry) {
-      console.log("inside conditional");
-      let { title, author, description, content, sourceName, publishedAt, image } = req.body
+      
+      let { title, author, description, content, sourceName, publishedAt, image, url } = req.body
       let newArticle = await entry.createArticle({
         title: title,
         author: author,
@@ -18,6 +18,7 @@ router.post("/create/:id", validateToken, async (req, res) => {
         sourceName: sourceName,
         image: image,
         publishedAt: publishedAt,
+        url: url
       });
       console.log(newArticle);
       await entry.addArticle(newArticle);

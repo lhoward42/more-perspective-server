@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     content: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(3000),
       allowNull: false,
     },
     sourceName: {
@@ -28,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    url: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    }
   });
   return Article;
 };
